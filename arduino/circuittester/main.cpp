@@ -2,6 +2,7 @@
 
 #include "Tester.hpp"
 #include "TesterState.hpp"
+#include "variant.h"
 
 const uint32_t OUTPUT_PIN = 5;
 const uint32_t INPUT_PIN = 5;
@@ -25,5 +26,6 @@ void loop() {
   }
 
   String command = Serial.readStringUntil('\n');
+  Serial.println(command);
   tester.execute(command);
 }
