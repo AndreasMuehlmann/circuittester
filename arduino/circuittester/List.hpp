@@ -12,6 +12,7 @@ public:
   auto at(size_t index) -> T;
   auto set(size_t index, T element) -> void;
   auto getSize() -> size_t;
+  auto toInt() -> List<int>;
 private:
   T m_array[CAPACITY];
   size_t m_size;
@@ -54,4 +55,13 @@ auto List<T>::set(size_t index, T element) -> void {
 template <class T>
 auto List<T>::getSize() -> size_t {
   return m_size;
+}
+
+template <>
+inline auto List<String>::toInt() -> List<int> {
+  List<int> list;
+  for (int i = 0; i < m_size; i++) {
+    list.add(at(i).toInt());
+  }
+  return list;
 }

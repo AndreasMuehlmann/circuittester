@@ -4,4 +4,4 @@
 
 #include "List.hpp"
 
-auto splitByComma(String& string) -> List<String>;
+auto split(String& string, char delimiter) -> List<String>;

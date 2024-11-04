@@ -33,9 +33,7 @@ auto Tester::handleStateChangeCommand(String& command) -> bool {
 
   Serial.println(newState);
   if (newState == "TruthTable") {
-    Serial.println("change state to truth table");
   } else if (newState == "Wait") {
-    Serial.println("change state to wait");
     changeState(new WaitState());
   }
 }
