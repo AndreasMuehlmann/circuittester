@@ -1,11 +1,11 @@
 #include "Utils.hpp"
 
 
-auto splitByComma(String& string) -> List<String> {
+auto split(String& string, char delimiter) -> List<String> {
   List<String> list;
   int index = 0;
   while (index != -1) {
-    index = string.indexOf(",");
+    index = string.indexOf(delimiter);
 
     if (index == -1) { 
       string.trim();
