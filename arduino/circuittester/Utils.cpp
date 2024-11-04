@@ -15,6 +15,12 @@ auto splitByComma(String& string) -> List<String> {
 
     String element = string.substring(0, index);
     element.trim();
+
+    if (element == "") { continue; }
     list.add(element);
+
+    if (index + 1 >= string.length()) { break; }
+    string = string.substring(index + 1);
   }
+  return list;
 }

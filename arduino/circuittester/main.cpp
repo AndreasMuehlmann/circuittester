@@ -2,10 +2,7 @@
 
 #include "Tester.hpp"
 #include "TesterState.hpp"
-#include "variant.h"
 
-const uint32_t OUTPUT_PIN = 5;
-const uint32_t INPUT_PIN = 5;
 const size_t MAX_PINS = 32;
 const uint32_t TIMEOUT = 100;
 
@@ -14,7 +11,6 @@ Tester tester;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(OUTPUT_PIN, OUTPUT);
 }
 
 void loop() {
@@ -24,7 +20,6 @@ void loop() {
         // timeout
       }
   }
-
   String command = Serial.readStringUntil('\n');
   Serial.println(command);
   tester.execute(command);
