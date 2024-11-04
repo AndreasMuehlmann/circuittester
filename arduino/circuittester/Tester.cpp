@@ -1,11 +1,14 @@
 #include <Arduino.h>
 
 #include "Tester.hpp"
-#include "WaitState.hpp"
+#include "NothingTester.hpp"
+#include "TruthTableTester.hpp"
 #include "variant.h"
 
+const String STATE_CHANGE_PREFIX = "Tester ";
+
 Tester::Tester() {
-  _state = new WaitState();
+  _state = new NothingTester();
 }
 
 auto Tester::execute(String& command) -> void {
@@ -16,29 +19,33 @@ auto Tester::execute(String& command) -> void {
 }
 
 auto Tester::handleStateChangeCommand(String& command) -> bool {
-  if (!command.startsWith("ChangeState ")) {
+  if (!command.startsWith(STATE_CHANGE_PREFIX)) {
     return false;
   }
-  command = command.substring(12);
+  command = command.substring(STATE_CHANGE_PREFIX.length());
 
   String newState;
-
   int index = command.indexOf(" ");
   if (index == -1) {
     newState = command;
     command = "";
   } else {
     newState = command.substring(0, index);
+    command = index == command.length() ? "" : command.substring(index + 1);
   }
 
-  Serial.println(newState);
-  if (newState == "TruthTable") {
-  } else if (newState == "Wait") {
-    changeState(new WaitState());
+  if (newState == "TruthTableTester") {
+    changeState(new TruthTableTester(command));
+  } else if (newState == "NothingTester") {
+    changeState(new NothingTester());
+  } else {
+    Serial.println("Error: No matching Tester found for \"" + newState + "\".");
   }
+  return true;
 }
 
 auto Tester::changeState(TesterState* state) -> void {
   delete _state;
   _state = state;
 }
+

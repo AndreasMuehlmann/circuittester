@@ -1,5 +1,6 @@
 #pragma once
 
+#include "variant.h"
 #include <Arduino.h>
 
 const size_t CAPACITY = 100;
@@ -12,7 +13,9 @@ public:
   auto at(size_t index) -> T;
   auto set(size_t index, T element) -> void;
   auto getSize() -> size_t;
+  auto extend(List<T> list) -> void;
   auto toInt() -> List<int>;
+  auto println() -> void;
 private:
   T m_array[CAPACITY];
   size_t m_size;
@@ -55,6 +58,21 @@ auto List<T>::set(size_t index, T element) -> void {
 template <class T>
 auto List<T>::getSize() -> size_t {
   return m_size;
+}
+
+template <class T>
+auto List<T>::extend(List<T> list) -> void {
+  for (int i = 0; i < list.getSize(); i++) {
+    add(list.at(i));
+  }
+}
+
+template <class T>
+auto List<T>::println() -> void {
+  for (int i = 0; i < m_size - 1; i++) {
+    Serial.print(String(at(i)) + ",");
+  }
+  Serial.println(String(at(m_size - 1)));
 }
 
 template <>

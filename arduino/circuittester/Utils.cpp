@@ -24,3 +24,14 @@ auto split(String& string, char delimiter) -> List<String> {
   }
   return list;
 }
+
+auto reoccurences(List<int> list) -> bool {
+  for (int i = 0; i < list.getSize(); i++) {
+    for (int j = 0; j < list.getSize(); j++) {
+      if (i != j && list.at(i) == list.at(j)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}

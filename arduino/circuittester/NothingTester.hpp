@@ -2,8 +2,8 @@
 
 #include "TesterState.hpp"
 
-class WaitState : public TesterState {
+class NothingTester : public TesterState {
 public:
-  WaitState() = default;
+  NothingTester() = default;
   auto execute(String command) -> void;
 };
