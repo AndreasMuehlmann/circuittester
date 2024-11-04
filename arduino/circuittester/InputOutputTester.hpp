@@ -3,9 +3,9 @@
 #include "TesterState.hpp"
 #include "List.hpp"
 
-class TruthTableTester : public TesterState {
+class InputOutputTester : public TesterState {
 public:
-  TruthTableTester(String creationCommand);
+  InputOutputTester(String creationCommand);
   auto execute(String command) -> void;
 private:
   List<int> m_inputPins;

@@ -2,7 +2,7 @@
 
 #include "Tester.hpp"
 #include "NothingTester.hpp"
-#include "TruthTableTester.hpp"
+#include "InputOutputTester.hpp"
 #include "variant.h"
 
 const String STATE_CHANGE_PREFIX = "Tester ";
@@ -34,8 +34,8 @@ auto Tester::handleStateChangeCommand(String& command) -> bool {
     command = index == command.length() ? "" : command.substring(index + 1);
   }
 
-  if (newState == "TruthTableTester") {
-    changeState(new TruthTableTester(command));
+  if (newState == "InputOutputTester") {
+    changeState(new InputOutputTester(command));
   } else if (newState == "NothingTester") {
     changeState(new NothingTester());
   } else {
