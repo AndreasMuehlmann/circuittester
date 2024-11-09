@@ -1,9 +1,9 @@
 #include "InputTester.hpp"
 #include "Utils.hpp"
 #include "variant.h"
+#include "wiring_constants.h"
 
 InputTester::InputTester(String creationCommand) {
-  //Tester InputTester 3, 4
   List<String> stringInputPins = split(creationCommand, ',');
   m_inputPins = stringInputPins.toInt();
 

@@ -38,7 +38,7 @@ auto Tester::handleStateChangeCommand(String& command) -> bool {
   if (newState == "InputOutputTester") {
     changeState(new InputOutputTester(command));
   } else if (newState == "InputTester") {
-    changeState(new InputTester(comman));
+    changeState(new InputTester(command));
   } else if (newState == "NothingTester") {
     changeState(new NothingTester());
   } else {
