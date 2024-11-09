@@ -6,6 +6,7 @@ import yaml
 from serial_connection import SerialConnection
 from tester import TesterException
 from truth_table_tester import truthTableTesterFromYaml, TruthTableTester
+from timing_diagram_tester import timingDiagramTesterFromYaml, TimingDiagramTester
 
 
 def main():
@@ -51,9 +52,11 @@ def main():
     try:
         if taskType == "truth-table":
             tester: TruthTableTester = truthTableTesterFromYaml(task)
+        elif taskType == "timing-diagram":
+            tester: TimingDiagramTester = timingDiagramTesterFromYaml(task)
         else:
-            print(f"Error: \"{taskType}\" is not an available type for a task."
-                  f"Available task types are: \"truth-table\"")
+            print(f"Error: \"{taskType}\" is not an available type for a task. "
+                  f"Available task types are: \"truth-table\" and \"timing-diagram\".")
             return
     except Exception as e:
         print(f"Error: {e}")

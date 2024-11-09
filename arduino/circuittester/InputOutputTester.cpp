@@ -4,7 +4,6 @@
 #include "wiring_constants.h"
 
 InputOutputTester::InputOutputTester(String creationCommand) {
-  //Tester InputOutputTester 3, 4; 5, 6
   List<String> inputAndOutputPins = split(creationCommand, ';');
   if (inputAndOutputPins.getSize() < 2) {
     Serial.println("Error: Expected input and output pins with delimiter \";\" for InputOutputTester creation. Got " + String(inputAndOutputPins.getSize() - 1) + " \";\" .");

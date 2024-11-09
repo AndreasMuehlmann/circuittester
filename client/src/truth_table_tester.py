@@ -58,8 +58,8 @@ def truthTableTesterFromYaml(task: YAMLObject) -> TruthTableTester:
     if not input_headers:
         raise TesterException(
             "Expected \"input-headers\" key to not be an empty list.")
-    for output_header in input_headers:
-        if not isinstance(output_header, str):
+    for input_header in input_headers:
+        if not isinstance(input_header, str):
             raise TesterException(
                 "Expected all values in \"input-headers\" key to be of type string.")
 

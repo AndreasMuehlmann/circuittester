@@ -4,7 +4,7 @@
 #include "TesterState.hpp"
 
 const size_t MAX_PINS = 32;
-const uint32_t TIMEOUT = 500;
+const uint32_t TIMEOUT = 5000;
 
 
 Tester tester;

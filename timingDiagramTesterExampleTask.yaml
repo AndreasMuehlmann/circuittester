@@ -1,0 +1,6 @@
+port: "/dev/ttyACM0"
+type: "timing-diagram"
+timing-diagram:
+  headers: ["a", "b"]
+  output-measuring-pins: [6, 7]
+  measurement-duration: 10

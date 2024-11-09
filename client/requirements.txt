@@ -2,3 +2,4 @@ pyserial
 termcolor
 pyyaml
 argparse
+matplotlib

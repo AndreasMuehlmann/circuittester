@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #include "Tester.hpp"
+#include "InputTester.hpp"
 #include "NothingTester.hpp"
 #include "InputOutputTester.hpp"
 #include "variant.h"
@@ -36,6 +37,8 @@ auto Tester::handleStateChangeCommand(String& command) -> bool {
 
   if (newState == "InputOutputTester") {
     changeState(new InputOutputTester(command));
+  } else if (newState == "InputTester") {
+    changeState(new InputTester(comman));
   } else if (newState == "NothingTester") {
     changeState(new NothingTester());
   } else {
