@@ -6,6 +6,7 @@
 class InputOutputTester : public TesterState {
 public:
   InputOutputTester(String creationCommand);
+  ~InputOutputTester();
   auto execute(String command) -> void;
 private:
   List<int> m_inputPins;

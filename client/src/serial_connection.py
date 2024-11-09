@@ -7,8 +7,12 @@ class SerialConnection:
         self.connection = serial.Serial(port, 9600, timeout=1.0)
         time.sleep(0.5)
 
-    def recv(self):
-        return self.connection.readline().decode().strip()
+    def recv(self) -> str:
+        received: str = self.connection.readline().decode().strip()
+        if (not received):
+            raise serial.serialutil.SerialException(
+                "Error: Connection timed out.")
+        return received
 
     def send(self, data):
         self.connection.write(str(data).encode() + b'\n')

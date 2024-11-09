@@ -1,7 +1,11 @@
+import os
 import argparse
 import serial
+import yaml
 
 from serial_connection import SerialConnection
+from tester import TesterException
+from truth_table_tester import truthTableTesterFromYaml, TruthTableTester
 
 
 def main():
@@ -15,24 +19,66 @@ def main():
         help="The yaml file specifying a task.",
     )
     parser.add_argument(
-        "port",
+        "--port",
         type=str,
         help="The port the arduino is connected to.",
     )
     args = parser.parse_args()
 
-    print("Connecting...")
+    if not os.path.isfile(args.task):
+        print("Error: \"{args.task}\" is not a file.")
+        return
     try:
-        connection: SerialConnection = SerialConnection(args.port)
-    except serial.serialutil.SerialException as e:
-        print(e)
+        with open(args.task, "r") as file:
+            task = yaml.safe_load(file)
+    except Exception as e:
+        print(f"Error: {e}")
         return
 
-    print("Sending message...")
-    connection.send("Hello World!")
-    print("Receiving message...")
-    print(connection.recv())
+    if args.port:
+        port = args.port
+    elif task.get("port") is not None:
+        port = task.get("port")
+    else:
+        print("Error: Port has to be provided as argument or in task.")
+        return
+
+    taskType = task.get("type")
+    if taskType is None:
+        print("Error: Expected \"type\" key in task specification.")
+        return
+
+    try:
+        if taskType == "truth-table":
+            tester: TruthTableTester = truthTableTesterFromYaml(task)
+        else:
+            print(f"Error: \"{taskType}\" is not an available type for a task."
+                  f"Available task types are: \"truth-table\"")
+            return
+    except Exception as e:
+        print(f"Error: {e}")
+        return
+
+    try:
+        connection: SerialConnection = SerialConnection(port)
+    except serial.serialutil.SerialException as e:
+        print(f"Error: {e}")
+        return
+
+    try:
+        tester.test(connection)
+    except TesterException as e:
+        print(f"Error: {e}")
+        connection.send("Tester NothingTester")
+        connection.reset()
+        return
+
+    connection.send("Tester NothingTester")
+    connection.reset()
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass

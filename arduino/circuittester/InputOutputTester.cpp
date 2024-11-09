@@ -30,7 +30,7 @@ InputOutputTester::InputOutputTester(String creationCommand) {
       Serial.println("Error: Pins 1 and 2 don't work.");
       return;
     }
-    pinMode(m_inputPins.at(i), INPUT);
+    pinMode(m_inputPins.at(i), INPUT_PULLUP);
   }
   for (int i = 0; i < m_outputPins.getSize(); i++) {
     if (m_inputPins.at(i) <= 2) {
@@ -64,10 +64,18 @@ auto InputOutputTester::execute(String command) -> void {
     }
   }
 
+  delay(50);
+
   List<int> inputValues;
   for (int i = 0; i < m_inputPins.getSize(); i++) {
     inputValues.add(digitalRead(m_inputPins.at(i)));
   }
 
   inputValues.println();
+}
+
+InputOutputTester::~InputOutputTester() {
+  for (int i = 0; i < m_outputPins.getSize(); i++) {
+      digitalWrite(m_outputPins.at(i), LOW);
+  }
 }
