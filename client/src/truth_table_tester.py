@@ -22,10 +22,12 @@ class TruthTableTester(Tester):
         self.output_headers = output_headers
 
     def test(self, connection: SerialConnection):
-        connection.send(f"Tester InputOutputTester {",".join(map(str, self.output_measuring_pins))};{",".join(map(str, self.input_sending_pins))}")
+        connection.send(f"Tester InputOutputTester {",".join(map(
+            str, self.output_measuring_pins))};{",".join(map(str, self.input_sending_pins))}")
         measured_outputs = []
         for input, expected_output in enumerate(self.expected_outputs):
-            input_binary: str = list(left_pad(f"{input:b}", "0", len(self.input_headers)))
+            input_binary: str = list(
+                left_pad(f"{input:b}", "0", len(self.input_headers)))
             connection.send(",".join(input_binary))
 
             message: str = connection.recv()
@@ -34,12 +36,14 @@ class TruthTableTester(Tester):
 
             measured_output: list[str] = message.split(",")
             if len(measured_output) != len(self.output_headers):
-                raise TesterException(f"The length of measured outputs doesn't match the lenght of output headers: {message}.")
+                raise TesterException(
+                    f"The length of measured outputs doesn't match the lenght of output headers: {message}.")
             measured_outputs.append(validate_measured_output(measured_output))
 
             time.sleep(0.01)
 
-        print_truth_table(self.input_headers, self.output_headers, self.expected_outputs, measured_outputs)
+        print_truth_table(self.input_headers, self.output_headers,
+                          self.expected_outputs, measured_outputs)
 
 
 def truthTableTesterFromYaml(task: YAMLObject) -> TruthTableTester:
@@ -100,7 +104,8 @@ def truthTableTesterFromYaml(task: YAMLObject) -> TruthTableTester:
             raise TesterException(
                 "Expected all values in \"output-headers\" key to be of type string.")
 
-    output_measuring_pins: YAMLObject = truth_table.get("output-measuring-pins")
+    output_measuring_pins: YAMLObject = truth_table.get(
+        "output-measuring-pins")
     if output_measuring_pins is None:
         raise TesterException(
             "Expected \"output-measuring-pins\" key in the scope of key \"truth-table\" in task specification with type \"truth-table\".")
