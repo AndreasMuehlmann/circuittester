@@ -3,7 +3,7 @@ type: "truth-table"
 truth-table:
   input-headers: ["a", "b"]
   input-sending-pins: [4, 5]
-  output-headers: ["a", "c"]
+  output-headers: ["a", "1"]
   output-measuring-pins: [6, 7]
   expected-outputs:
     - [0, 1]

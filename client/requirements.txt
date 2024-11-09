@@ -1,0 +1,4 @@
+pyserial
+termcolor
+pyyaml
+argparse

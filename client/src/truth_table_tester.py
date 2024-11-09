@@ -3,7 +3,7 @@ from yaml import YAMLObject
 
 from tester import Tester, TesterException
 from serial_connection import SerialConnection
-from utils import left_pad
+from utils import left_pad, validate_measured_output, print_truth_table
 
 
 class TruthTableTester(Tester):
@@ -23,30 +23,23 @@ class TruthTableTester(Tester):
 
     def test(self, connection: SerialConnection):
         connection.send(f"Tester InputOutputTester {",".join(map(str, self.output_measuring_pins))};{",".join(map(str, self.input_sending_pins))}")
+        measured_outputs = []
         for input, expected_output in enumerate(self.expected_outputs):
             input_binary: str = list(left_pad(f"{input:b}", "0", len(self.input_headers)))
             connection.send(",".join(input_binary))
+
             message: str = connection.recv()
             if message.startswith("Error"):
                 raise TesterException(f"Arduino {message}")
+
             measured_output: list[str] = message.split(",")
             if len(measured_output) != len(self.output_headers):
                 raise TesterException(f"The length of measured outputs doesn't match the lenght of output headers: {message}.")
-            for expected_output_for_header, measured_output_for_header in zip(expected_output, measured_output):
-                try:
-                    measured_output_for_header = int(measured_output_for_header)
-                except ValueError:
-                    raise TesterException(f"Measured output is not an integer: {message}.")
-                if measured_output_for_header != 0 and measured_output_for_header != 1:
-                    raise TesterException(f"Measured output is not 1 or 0: {message}.")
-                if measured_output_for_header != expected_output_for_header:
-                    print(f"         {"|".join(self.input_headers)}: {"|".join(self.output_headers)}")
-                    print(f"Expected {"|".join(input_binary)}: {"|".join(map(str, expected_output))}")
-                    print(f"Actual   {"|".join(input_binary)}: {"|".join(map(str, measured_output))}")
-                    print()
-                    break
+            measured_outputs.append(validate_measured_output(measured_output))
 
-            time.sleep(0.5)
+            time.sleep(0.01)
+
+        print_truth_table(self.input_headers, self.output_headers, self.expected_outputs, measured_outputs)
 
 
 def truthTableTesterFromYaml(task: YAMLObject) -> TruthTableTester:
@@ -135,6 +128,10 @@ def truthTableTesterFromYaml(task: YAMLObject) -> TruthTableTester:
     if not expected_outputs:
         raise TesterException(
             "Expected \"expected-outputs\" key to be not be an empty list.")
+    if len(expected_outputs) > 2 ** len(input_headers):
+        raise TesterException(
+            "Expected lenght of expected-outputs to be smaller or equal to 2^lenght(input_headers).")
+
     for expected_output in expected_outputs:
         if not isinstance(expected_output, list):
             raise TesterException(
